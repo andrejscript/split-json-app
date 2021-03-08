@@ -6,6 +6,7 @@ let setOfNumderArrays = {},
   examplesDB = document.querySelectorAll('div[data-db]'),
   enterOutputField = document.querySelector('.enter-output'),
   stepsProcessField = document.querySelector('.steps-list'),
+  resultField = document.querySelector('#result'),
   upload = document.querySelector('#upload');
 
 upload.addEventListener('change', function (e) {
@@ -115,12 +116,14 @@ function addPropsInObj(set) {
       sortArr = primeArr.slice().sort((a, b) => b - a);
       sumArr = primeArr.reduce((acc, item) => acc + item, 0);
       halfSumArr = sumArr / 2;
+      halfSumArr % 2 !== 0 ? (halfSumArr = Math.floor(halfSumArr)) : null;
       resultEqualObj = equalizeArray(sortArr, halfSumArr);
       eachObj = { primeArr, sortArr, sumArr, halfSumArr, resultEqualObj };
       collection['obj' + count] = { ...eachObj };
     }
   }
   renderProcessSteps(collection);
+  console.log(collection);
 }
 
 function equalizeArray(sortArr, halfSumArr) {
@@ -129,18 +132,38 @@ function equalizeArray(sortArr, halfSumArr) {
     firstPartArr = [],
     secondPartArr = [];
 
-  halfSumArr % 2 !== 0 ? Math.floor(halfSumArr) : null;
+  let count = 0;
 
   for (let i = 0; i < sortArr.length; i++) {
-    if (firstSum <= halfSumArr) {
-      if (firstSum + sortArr[i] > halfSumArr) {
-        secondPartArr.push(sortArr[i]);
-        secondSum += sortArr[i];
+    firstSum === 0 ? (firstSum = sortArr[0]) : null;
+    firstPartArr.length === 0 ? firstPartArr.push(sortArr[0]) : null;
+    count++;
+
+    function findElems() {
+      if(firstSum !== halfSumArr) {
+
+        for (let j = 1; j < sortArr.length; j++) {
+          if (firstSum + sortArr[j] !== halfSumArr) {
+            continue;
+          } else {
+            firstPartArr.push(sortArr[j]);
+            firstSum += sortArr[j];
+            firstSum = firstPartArr.reduce((acc, item) => acc + item, 0);
+            secondPartArr = sortArr.filter( ( el ) => !firstPartArr.includes( el ) );
+            secondSum = secondPartArr.reduce((acc, item) => acc + item, 0);
+            return {firstPartArr, firstSum, secondPartArr, secondSum}
+          }
+        }
+      
+        firstSum += sortArr[sortArr.length - count];
+        firstPartArr.push(sortArr[sortArr.length - count]);
       } else {
-        firstSum += sortArr[i];
-        firstPartArr.push(sortArr[i]);
+        return 
       }
+
     }
+
+    findElems()
   }
   return { firstSum, firstPartArr, secondSum, secondPartArr };
 }
@@ -169,9 +192,9 @@ function renderProcessSteps(stepsData) {
   stepsProcessField.innerHTML = '';
 
   let entriesData = Object.entries(stepsData),
-    dataLength = document.createElement('ol'),
+    dataList = document.createElement('ol'),
     receivedTitle = `<li>Have been received <strong><u>${entriesData.length}</u></strong> object(s)</li>`,
-    pureArrTitle = `<li>Which includes pure arrays with longer than 2:</li>`,
+    primeArr = `<li>Which includes pure arrays with longer than 2:</li>`,
     sortTitle = `<li>Let's sort them:</li>`,
     sumTitle = `<li>Get sum of each:</li>`,
     halfSumTitle = `<li>And also get half of these sum:</li>`,
@@ -179,8 +202,9 @@ function renderProcessSteps(stepsData) {
     roundedSumTitle = `<span>(If the amount isn't odd - round its value down)</span><br>`;
 
   function addStepsTitle(str) {
-    dataLength.innerHTML += str;
+    dataList.innerHTML += str;
   }
+
   addStepsTitle(receivedTitle);
 
   function addStepsData(prop) {
@@ -189,30 +213,28 @@ function renderProcessSteps(stepsData) {
 
       for (let item in value) {
         let i = value[item];
-        if (prop === 'halfSumArr' && i % 2 !== 0) {
-          let dataFloor = Math.floor(i);
-          i === arg
-            ? (dataLength.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
-            : null;
-        } else if (Array.isArray(i)) {
-          i === arg
-            ? (dataLength.innerHTML += `[<strong>${arg}</strong>]<br>`)
-            : null;
-        } else {
-          i === arg
-            ? (dataLength.innerHTML += `<strong>${arg}</strong><br>`)
-            : null;
-        }
+        checkStepsItem(prop, i, arg);
       }
-
+      renderResult(value.resultEqualObj)
     }
   }
 
-  // function add(prop) {
-  //   for (const [key, value] of entriesData) {
-  // }
+  function checkStepsItem(prop, i, arg) {
+    if (prop === 'halfSumArr' && i % 2 !== 0) {
+      let dataFloor = Math.floor(i);
+      i === arg
+        ? (dataList.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
+        : null;
+    } else if (Array.isArray(i)) {
+      i === arg
+        ? (dataList.innerHTML += `[<strong>${arg}</strong>]<br>`)
+        : null;
+    } else {
+      i === arg ? (dataList.innerHTML += `<strong>${arg}</strong><br>`) : null;
+    }
+  }
 
-  addStepsTitle(pureArrTitle);
+  addStepsTitle(primeArr);
   addStepsData('primeArr');
   addStepsTitle(sortTitle);
   addStepsData('sortArr');
@@ -222,5 +244,36 @@ function renderProcessSteps(stepsData) {
   addStepsData('halfSumArr');
   addStepsTitle(resumeTitle);
 
-  stepsProcessField.appendChild(dataLength);
+  stepsProcessField.appendChild(dataList);
+}
+
+function renderResult(data) {
+  resultField.innerHTML = '';
+
+  let resultList = document.createElement('ul');
+  let entriesData = Object.entries(data);
+
+  
+  // function addStepsTitle(str) {
+  //   dataLength.innerHTML += str;
+  // }
+  
+  // addStepsTitle(receivedTitle);
+  // resultField.innerHTML += resultList;
+  
+  function addResultData(data) {
+    for (const key in data) {
+      
+      // let arg = data[value];
+      console.log(data[key]);
+
+      resultList.innerHTML += `<li>${data[key]}</li>`
+      
+      
+
+    }
+  }
+  resultField.appendChild(resultList);
+
+  addResultData(entriesData)
 }

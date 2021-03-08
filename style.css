@@ -54,7 +54,8 @@ h3 {
   margin: 20px auto;
 }
 
-.expamles-row div {
+.expamles-row div, 
+label.expamle-file {
   width: 100%;
   max-width: 140px;
   border-radius: 4px;
@@ -74,11 +75,29 @@ h3 {
   cursor: pointer;
   user-select: none;
 }
-.expamles-row div:hover {
+
+.expamles-row div:hover, 
+label.expamle-file:hover {
   background: rgb(10 144 91);
   box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
   color: white;
   transform: translateY(-7px);
+}
+
+.expamles-row div:first-child:hover {
+  transform: translateX(-7px);
+}
+
+.expamles-row div:last-child:hover {
+  transform: translateX(7px);
+}
+
+
+label.expamle-file:hover {
+  background: rgb(10 144 91);
+  box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
+  color: white;
+  transform: translateY(7px);
 }
 
 .error-prompt {
@@ -97,9 +116,9 @@ h3 {
 }
 
 /* -------- Input file --------- */
-
-/*/////
-
+.expamle-file input {
+  display: none;
+}
 /* --------View work place--------- */
 
 .view-block {
