@@ -1,0 +1,36 @@
+{
+  "set3-1": [
+    "some text",
+    1,
+    13,
+    6,
+    17,
+    7
+  ],
+  "set3-2": [
+    4,
+    "more text",
+    "more than prev text",
+    false,
+    2,
+    "also some text",
+    null
+  ],
+  "set3-3": [
+    2,
+    "some text else",
+    9,
+    false,
+    3,
+    12,
+    8,
+    11
+  ],
+  "set3-4": [
+    12,
+    "more text",
+    true,
+    3,
+    "also some text"
+  ]
+}
