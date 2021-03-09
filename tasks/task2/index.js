@@ -140,31 +140,30 @@ function equalizeArray(sortArr, halfSumArr) {
     count++;
 
     (() => {
-      if(firstSum !== halfSumArr) {
-
+      if (firstSum !== halfSumArr) {
         for (let j = 1; j < sortArr.length; j++) {
           if (firstSum + sortArr[j] !== halfSumArr) {
             continue;
           } else {
             firstPartArr.push(sortArr[j]);
             firstSum += sortArr[j];
-            return createResultObj()
+            return createResultObj();
           }
         }
-      
+
         firstSum += sortArr[sortArr.length - count];
         firstPartArr.push(sortArr[sortArr.length - count]);
       } else {
-        return createResultObj()
+        return createResultObj();
       }
-    })()
+    })();
   }
 
   function createResultObj() {
     firstSum = firstPartArr.reduce((acc, item) => acc + item, 0);
-    secondPartArr = sortArr.filter(el => !firstPartArr.includes(el) );
+    secondPartArr = sortArr.filter((el) => !firstPartArr.includes(el));
     secondSum = secondPartArr.reduce((acc, item) => acc + item, 0);
-    return {firstPartArr, firstSum, secondPartArr, secondSum}
+    return { firstPartArr, firstSum, secondPartArr, secondSum };
   }
 
   return { firstSum, firstPartArr, secondSum, secondPartArr };
@@ -192,6 +191,21 @@ function renderIncomeData(data) {
 
 function renderProcessSteps(stepsData) {
   stepsProcessField.innerHTML = '';
+console.log(getDataFetch());
+
+
+  (async () => {
+  const res = await fetch(`/tasks/task2/titles.json`);
+
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}` + `, received ${res.status}`);
+  }
+
+  let data = await res.json();
+  console.log(data);
+  
+  })();
+
 
   let entriesData = Object.entries(stepsData),
     dataList = document.createElement('ol'),
@@ -200,7 +214,10 @@ function renderProcessSteps(stepsData) {
     sortTitle = `<li>Let's sort them:</li>`,
     sumTitle = `<li>Get sum of each:</li>`,
     halfSumTitle = `<li>And also get half of these sum:</li>`,
-    resumeTitle = `<li>Then iterate over the array by summing the largest element with the rest until it's equal to half by writing the summed elements into one of the arrays and the rest into the other one.</li>`,
+    resumeTitle = `<li>Then we iterate over the array using two nested loops and a condition, checking at each step the sum of the first element with each in the array until it becomes equal to half, repeating the loop check.</li>`,
+    endTitle = `<li>If the sum of the counter and each element being iterated over is not equal to half the sum of the array,
+    summing the largest element with the smallest, taking it from the end of the array, and then repeat the check,
+    the summed elements are entered into one of the defined arrays, and the rest into another.</li>`,
     roundedSumTitle = `<span>(If the amount isn't odd - round its value down)</span><br>`;
 
   function addStepsTitle(str) {
@@ -217,7 +234,7 @@ function renderProcessSteps(stepsData) {
         let i = value[item];
         checkStepsItem(prop, i, arg);
       }
-      renderResult(value.resultEqualObj)
+      renderResult(value.resultEqualObj);
     }
   }
 
@@ -245,38 +262,33 @@ function renderProcessSteps(stepsData) {
   addStepsTitle(halfSumTitle);
   addStepsData('halfSumArr');
   addStepsTitle(resumeTitle);
+  addStepsTitle(endTitle);
 
   stepsProcessField.appendChild(dataList);
 }
 
 function renderResult(data) {
-  resultField.innerHTML = '';
+  let resultList = document.createElement('ul'),
+    resultTitle = document.createElement('p'),
+    entriesData = Object.entries(data);
 
-  let resultList = document.createElement('ul');
-  let entriesData = Object.entries(data);
+  resultField.innerHTML = '';
+  resultList.classList.add('grid-class');
+  resultTitle.innerHTML = ``;
+  resultField.appendChild(resultTitle);
+  resultField.appendChild(resultList);
 
   function addResultData(data) {
     for (const key in data) {
-
       let item = data[key];
       console.log(item);
 
-      // for (let i = 0; i < item.length; i++) {
-        if (Array.isArray(item[1])) {
-          resultList.innerHTML += `<li>${item[0]}:</li><li>[${item[1]}]</li>`;
-        } else {
-          resultList.innerHTML += `<li>${item[0]}:</li><li>${item[1]}</li>`;
-
-        }
-        // console.log(item[i], i, item);
-        // console.log(item);
-
-      // }
-      
-  
+      if (Array.isArray(item[1])) {
+        resultList.innerHTML += `<li>${item[0]}:</li><li>[<strong>${item[1]}</strong>]</li>`;
+      } else {
+        resultList.innerHTML += `<li>${item[0]}:</li><li><strong>${item[1]}</strong></li>`;
+      }
     }
   }
-  resultField.appendChild(resultList);
-
-  addResultData(entriesData)
+  addResultData(entriesData);
 }
