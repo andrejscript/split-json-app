@@ -3,6 +3,7 @@
 let setOfNumderArrays = {},
   localDB,
   collection = {},
+  objectToJSON = {},
   examplesDB = document.querySelectorAll('div[data-db]'),
   enterOutputField = document.querySelector('.enter-output'),
   stepsProcessField = document.querySelector('.steps-list'),
@@ -112,12 +113,12 @@ function addPropsInObj(set) {
       resultEqualObj;
 
     for (let arr in eachObj) {
-      let primeArr = eachObj[arr],              // eachArr = eachObj[arr] - [1, 2, 3, 4, 5]
-      halfSumArrCeil;
+      let primeArr = eachObj[arr], // eachArr = eachObj[arr] - [1, 2, 3, 4, 5]
+        halfSumArrCeil;
       sortArr = primeArr.slice().sort((a, b) => b - a);
       sumArr = primeArr.reduce((acc, item) => acc + item, 0);
       halfSumArr = sumArr / 2;
-      halfSumArr % 2 !== 0 ? halfSumArr = Math.floor(halfSumArr) : null;
+      halfSumArr % 2 !== 0 ? (halfSumArr = Math.floor(halfSumArr)) : null;
       resultEqualObj = equalizeArray(sortArr, halfSumArr);
       eachObj = { primeArr, sortArr, sumArr, halfSumArr, resultEqualObj };
       collection['obj' + count] = { ...eachObj };
@@ -139,8 +140,6 @@ function equalizeArray(sortArr, half) {
     firstPartArr.length === 0 ? firstPartArr.push(sortArr[0]) : null;
     count++;
 
-    
-    
     (() => {
       if (firstSum !== half) {
         for (let j = 1; j < sortArr.length; j++) {
@@ -216,31 +215,30 @@ function renderProcessSteps(stepsData) {
 
   function addStepsData(prop) {
     for (const [key, value] of entriesData) {
-      forResultObj[key] = {...value.resultEqualObj};
+      forResultObj[key] = { ...value.resultEqualObj };
       let arg = value[prop];
       for (let item in value) {
-        let i = value[item]
+        let i = value[item];
         checkStepsItem(i, arg, item);
       }
     }
   }
 
-  
   function checkStepsItem(i, arg, iKey) {
     if (iKey === 'sumArr' && i % 2 !== 0) {
       let dataFloor = Math.floor(i);
       i === arg
-      ? (dataList.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
-      : null;
+        ? (dataList.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
+        : null;
     } else if (Array.isArray(i)) {
       i === arg
-      ? (dataList.innerHTML += `[<strong>${arg}</strong>]<br>`)
-      : null;
+        ? (dataList.innerHTML += `[<strong>${arg}</strong>]<br>`)
+        : null;
     } else {
       i === arg ? (dataList.innerHTML += `<strong>${arg}</strong><br>`) : null;
     }
   }
-  
+
   addStepsTitle(primeArr);
   addStepsData('primeArr');
   addStepsTitle(sortTitle);
@@ -251,42 +249,35 @@ function renderProcessSteps(stepsData) {
   addStepsData('halfSumArr');
   addStepsTitle(resumeTitle);
   addStepsTitle(endTitle);
-  
+
   renderResult(forResultObj);
   stepsProcessField.appendChild(dataList);
 }
 
 function renderResult(data) {
   let resultList = document.createElement('ul'),
-  entriesData = Object.entries(data);
+    entriesData = Object.entries(data);
+
   resultField.innerHTML = '';
   resultList.classList.add('grid-class');
-  
+
   function addResultData(data) {
     let count = 0;
-    let objRes = {};
-    let setKey = `set_${count}` 
-    
+
     for (let obj in data) {
       let innerObj = data[obj][1];
       resultList.innerHTML += `<li><strong>${data[obj][0]}</strong></li><li>Results:</li>`;
+      count++;
+
       for (let k in innerObj) {
-        count++;
-
-        
-        if(k === 'firstPartArr') {
-            objRes[setKey] = innerObj[k];
+        let setKey = `set_${count}`;
+        if (k === 'firstPartArr') {
+          objectToJSON[setKey] = innerObj[k];
           count++;
-          
-        } else if(k === 'secondPartArr') {
-            objRes[setKey] += innerObj[k];
-          count++;
-
+        } else if (k === 'secondPartArr') {
+          objectToJSON[setKey] = innerObj[k];
         }
-        console.log(objRes);
-
-        
-        resultList.innerHTML += `<li>${k}:</li><li>[<strong>${innerObj[k]}</strong>]</li>`;        
+        resultList.innerHTML += `<li>${k}:</li><li>[<strong>${innerObj[k]}</strong>]</li>`;
       }
     }
   }
@@ -295,7 +286,9 @@ function renderResult(data) {
   addResultData(entriesData);
 }
 
-// localStorage.setItem('test', 1)
-// let setKey = `set_${count}` 
-// if (innerObj.hasOwnProperty('firstPartArr')) {
-// objRes[k] = Object.values(innerObj[k]);
+function convertObjtoStorage(data) {
+  let json = JSON.stringify(data);
+  console.log(json);
+
+  localStorage.setItem('json', json);
+}
