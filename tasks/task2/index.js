@@ -139,7 +139,7 @@ function equalizeArray(sortArr, halfSumArr) {
     firstPartArr.length === 0 ? firstPartArr.push(sortArr[0]) : null;
     count++;
 
-    function findElems() {
+    (() => {
       if(firstSum !== halfSumArr) {
 
         for (let j = 1; j < sortArr.length; j++) {
@@ -148,23 +148,25 @@ function equalizeArray(sortArr, halfSumArr) {
           } else {
             firstPartArr.push(sortArr[j]);
             firstSum += sortArr[j];
-            firstSum = firstPartArr.reduce((acc, item) => acc + item, 0);
-            secondPartArr = sortArr.filter( ( el ) => !firstPartArr.includes( el ) );
-            secondSum = secondPartArr.reduce((acc, item) => acc + item, 0);
-            return {firstPartArr, firstSum, secondPartArr, secondSum}
+            return createResultObj()
           }
         }
       
         firstSum += sortArr[sortArr.length - count];
         firstPartArr.push(sortArr[sortArr.length - count]);
       } else {
-        return 
+        return createResultObj()
       }
-
-    }
-
-    findElems()
+    })()
   }
+
+  function createResultObj() {
+    firstSum = firstPartArr.reduce((acc, item) => acc + item, 0);
+    secondPartArr = sortArr.filter(el => !firstPartArr.includes(el) );
+    secondSum = secondPartArr.reduce((acc, item) => acc + item, 0);
+    return {firstPartArr, firstSum, secondPartArr, secondSum}
+  }
+
   return { firstSum, firstPartArr, secondSum, secondPartArr };
 }
 
@@ -194,7 +196,7 @@ function renderProcessSteps(stepsData) {
   let entriesData = Object.entries(stepsData),
     dataList = document.createElement('ol'),
     receivedTitle = `<li>Have been received <strong><u>${entriesData.length}</u></strong> object(s)</li>`,
-    primeArr = `<li>Which includes pure arrays with longer than 2:</li>`,
+    primeArr = `<li>Which include pure numder arrays with longer than 2:</li>`,
     sortTitle = `<li>Let's sort them:</li>`,
     sumTitle = `<li>Get sum of each:</li>`,
     halfSumTitle = `<li>And also get half of these sum:</li>`,
@@ -253,24 +255,25 @@ function renderResult(data) {
   let resultList = document.createElement('ul');
   let entriesData = Object.entries(data);
 
-  
-  // function addStepsTitle(str) {
-  //   dataLength.innerHTML += str;
-  // }
-  
-  // addStepsTitle(receivedTitle);
-  // resultField.innerHTML += resultList;
-  
   function addResultData(data) {
     for (const key in data) {
-      
-      // let arg = data[value];
-      console.log(data[key]);
 
-      resultList.innerHTML += `<li>${data[key]}</li>`
-      
-      
+      let item = data[key];
+      console.log(item);
 
+      // for (let i = 0; i < item.length; i++) {
+        if (Array.isArray(item[1])) {
+          resultList.innerHTML += `<li>${item[0]}:</li><li>[${item[1]}]</li>`;
+        } else {
+          resultList.innerHTML += `<li>${item[0]}:</li><li>${item[1]}</li>`;
+
+        }
+        // console.log(item[i], i, item);
+        // console.log(item);
+
+      // }
+      
+  
     }
   }
   resultField.appendChild(resultList);

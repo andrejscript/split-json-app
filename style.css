@@ -82,14 +82,17 @@ label.expamle-file:hover {
   box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
   color: white;
   transform: translateY(-7px);
+  transition: 0.3s;
 }
 
 .expamles-row div:first-child:hover {
-  transform: translateX(-7px);
+  transform: translateX(-5px);
+  transition: 0.3s;
 }
 
 .expamles-row div:last-child:hover {
-  transform: translateX(7px);
+  transform: translateX(5px);
+  transition: 0.3s;
 }
 
 
@@ -98,6 +101,7 @@ label.expamle-file:hover {
   box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
   color: white;
   transform: translateY(7px);
+  transition: 0.3s;
 }
 
 .error-prompt {
@@ -180,7 +184,7 @@ ul {
 
 .enter-output ul li {
   margin: 10px 0;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 2px;
   padding-bottom: 3px;
 }
@@ -204,4 +208,8 @@ ul {
 
 .steps ol span {
   font-size: 14px;
+}
+
+#result {
+  display: grid;
 }
