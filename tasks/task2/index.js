@@ -112,21 +112,21 @@ function addPropsInObj(set) {
       resultEqualObj;
 
     for (let arr in eachObj) {
-      let primeArr = eachObj[arr]; // eachArr = eachObj[arr] - [1, 2, 3, 4, 5]
+      let primeArr = eachObj[arr],              // eachArr = eachObj[arr] - [1, 2, 3, 4, 5]
+      halfSumArrCeil;
       sortArr = primeArr.slice().sort((a, b) => b - a);
       sumArr = primeArr.reduce((acc, item) => acc + item, 0);
       halfSumArr = sumArr / 2;
-      halfSumArr % 2 !== 0 ? (halfSumArr = Math.floor(halfSumArr)) : null;
+      halfSumArr % 2 !== 0 ? halfSumArr = Math.floor(halfSumArr) : null;
       resultEqualObj = equalizeArray(sortArr, halfSumArr);
       eachObj = { primeArr, sortArr, sumArr, halfSumArr, resultEqualObj };
       collection['obj' + count] = { ...eachObj };
     }
   }
   renderProcessSteps(collection);
-  console.log(collection);
 }
 
-function equalizeArray(sortArr, halfSumArr) {
+function equalizeArray(sortArr, half) {
   let firstSum = 0,
     secondSum = 0,
     firstPartArr = [],
@@ -139,10 +139,12 @@ function equalizeArray(sortArr, halfSumArr) {
     firstPartArr.length === 0 ? firstPartArr.push(sortArr[0]) : null;
     count++;
 
+    
+    
     (() => {
-      if (firstSum !== halfSumArr) {
+      if (firstSum !== half) {
         for (let j = 1; j < sortArr.length; j++) {
-          if (firstSum + sortArr[j] !== halfSumArr) {
+          if (firstSum + sortArr[j] !== half) {
             continue;
           } else {
             firstPartArr.push(sortArr[j]);
@@ -190,25 +192,9 @@ function renderIncomeData(data) {
 }
 
 function renderProcessSteps(stepsData) {
-  stepsProcessField.innerHTML = '';
-console.log(getDataFetch());
-
-
-  (async () => {
-  const res = await fetch(`/tasks/task2/titles.json`);
-
-  if (!res.ok) {
-    throw new Error(`Could not fetch ${url}` + `, received ${res.status}`);
-  }
-
-  let data = await res.json();
-  console.log(data);
-  
-  })();
-
-
   let entriesData = Object.entries(stepsData),
     dataList = document.createElement('ol'),
+    forResultObj = {},
     receivedTitle = `<li>Have been received <strong><u>${entriesData.length}</u></strong> object(s)</li>`,
     primeArr = `<li>Which include pure numder arrays with longer than 2:</li>`,
     sortTitle = `<li>Let's sort them:</li>`,
@@ -216,9 +202,11 @@ console.log(getDataFetch());
     halfSumTitle = `<li>And also get half of these sum:</li>`,
     resumeTitle = `<li>Then we iterate over the array using two nested loops and a condition, checking at each step the sum of the first element with each in the array until it becomes equal to half, repeating the loop check.</li>`,
     endTitle = `<li>If the sum of the counter and each element being iterated over is not equal to half the sum of the array,
-    summing the largest element with the smallest, taking it from the end of the array, and then repeat the check,
-    the summed elements are entered into one of the defined arrays, and the rest into another.</li>`,
+  summing the largest element with the smallest, taking it from the end of the array, and then repeat the check,
+  the summed elements are entered into one of the defined arrays, and the rest into another.</li>`,
     roundedSumTitle = `<span>(If the amount isn't odd - round its value down)</span><br>`;
+
+  stepsProcessField.innerHTML = '';
 
   function addStepsTitle(str) {
     dataList.innerHTML += str;
@@ -228,31 +216,31 @@ console.log(getDataFetch());
 
   function addStepsData(prop) {
     for (const [key, value] of entriesData) {
+      forResultObj[key] = {...value.resultEqualObj};
       let arg = value[prop];
-
       for (let item in value) {
-        let i = value[item];
-        checkStepsItem(prop, i, arg);
+        let i = value[item]
+        checkStepsItem(i, arg, item);
       }
-      renderResult(value.resultEqualObj);
     }
   }
 
-  function checkStepsItem(prop, i, arg) {
-    if (prop === 'halfSumArr' && i % 2 !== 0) {
+  
+  function checkStepsItem(i, arg, iKey) {
+    if (iKey === 'sumArr' && i % 2 !== 0) {
       let dataFloor = Math.floor(i);
       i === arg
-        ? (dataList.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
-        : null;
+      ? (dataList.innerHTML += `<strong>${dataFloor}</strong> ${roundedSumTitle}`)
+      : null;
     } else if (Array.isArray(i)) {
       i === arg
-        ? (dataList.innerHTML += `[<strong>${arg}</strong>]<br>`)
-        : null;
+      ? (dataList.innerHTML += `[<strong>${arg}</strong>]<br>`)
+      : null;
     } else {
       i === arg ? (dataList.innerHTML += `<strong>${arg}</strong><br>`) : null;
     }
   }
-
+  
   addStepsTitle(primeArr);
   addStepsData('primeArr');
   addStepsTitle(sortTitle);
@@ -263,32 +251,51 @@ console.log(getDataFetch());
   addStepsData('halfSumArr');
   addStepsTitle(resumeTitle);
   addStepsTitle(endTitle);
-
+  
+  renderResult(forResultObj);
   stepsProcessField.appendChild(dataList);
 }
 
 function renderResult(data) {
   let resultList = document.createElement('ul'),
-    resultTitle = document.createElement('p'),
-    entriesData = Object.entries(data);
-
+  entriesData = Object.entries(data);
   resultField.innerHTML = '';
   resultList.classList.add('grid-class');
-  resultTitle.innerHTML = ``;
-  resultField.appendChild(resultTitle);
-  resultField.appendChild(resultList);
-
+  
   function addResultData(data) {
-    for (const key in data) {
-      let item = data[key];
-      console.log(item);
+    let count = 0;
+    let objRes = {};
+    let setKey = `set_${count}` 
+    
+    for (let obj in data) {
+      let innerObj = data[obj][1];
+      resultList.innerHTML += `<li><strong>${data[obj][0]}</strong></li><li>Results:</li>`;
+      for (let k in innerObj) {
+        count++;
 
-      if (Array.isArray(item[1])) {
-        resultList.innerHTML += `<li>${item[0]}:</li><li>[<strong>${item[1]}</strong>]</li>`;
-      } else {
-        resultList.innerHTML += `<li>${item[0]}:</li><li><strong>${item[1]}</strong></li>`;
+        
+        if(k === 'firstPartArr') {
+            objRes[setKey] = innerObj[k];
+          count++;
+          
+        } else if(k === 'secondPartArr') {
+            objRes[setKey] += innerObj[k];
+          count++;
+
+        }
+        console.log(objRes);
+
+        
+        resultList.innerHTML += `<li>${k}:</li><li>[<strong>${innerObj[k]}</strong>]</li>`;        
       }
     }
   }
+
+  resultField.appendChild(resultList);
   addResultData(entriesData);
 }
+
+// localStorage.setItem('test', 1)
+// let setKey = `set_${count}` 
+// if (innerObj.hasOwnProperty('firstPartArr')) {
+// objRes[k] = Object.values(innerObj[k]);

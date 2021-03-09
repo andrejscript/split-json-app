@@ -54,7 +54,7 @@ h3 {
   margin: 20px auto;
 }
 
-.expamles-row div, 
+.expamles-row div,
 label.expamle-file {
   width: 100%;
   max-width: 140px;
@@ -76,7 +76,7 @@ label.expamle-file {
   user-select: none;
 }
 
-.expamles-row div:hover, 
+.expamles-row div:hover,
 label.expamle-file:hover {
   background: rgb(10 144 91);
   box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
@@ -94,7 +94,6 @@ label.expamle-file:hover {
   transform: translateX(5px);
   transition: 0.3s;
 }
-
 
 label.expamle-file:hover {
   background: rgb(10 144 91);
@@ -219,6 +218,12 @@ ul {
 
 .grid-class li {
   border: 1px solid rgb(219, 219, 219);
-  padding: .2em;
+  padding: 5px 0px 5px 40px;
   font-size: 16px;
+}
+
+.grid-class li:nth-child(2n) {
+  justify-self: center;
+  border: none;
+  text-align: initial;
 }
