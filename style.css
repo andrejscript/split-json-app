@@ -4,6 +4,7 @@ body {
   padding: 0;
   background: linear-gradient(90deg, #69b7eb, #b3dbd3, #f4d6db);
   font-family: 'HK Nova', sans-serif;
+  color: #2f2f2f;
 }
 
 .container-fluid {
@@ -54,8 +55,22 @@ h3 {
   margin: 20px auto;
 }
 
+.bottom-example-row {
+  display: flex;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  margin: 0px auto;
+  justify-content: flex-end;
+}
+
 .expamles-row div,
-label.expamle-file {
+label.expamle-file,
+label.reset-btn,
+.btn-tojson-block div {
   width: 100%;
   max-width: 140px;
   border-radius: 4px;
@@ -74,10 +89,18 @@ label.expamle-file {
   transition: 0.3s;
   cursor: pointer;
   user-select: none;
+  border: 1px solid #004a1a87;
+}
+
+label.reset-btn {
+  width: 40px;
+  margin: 0 40px 0 20px;
 }
 
 .expamles-row div:hover,
-label.expamle-file:hover {
+label.expamle-file:hover,
+label.reset-btn:hover,
+.btn-tojson-block div:hover {
   background: rgb(10 144 91);
   box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
   color: white;
@@ -96,32 +119,25 @@ label.expamle-file:hover {
 }
 
 label.expamle-file:hover {
-  background: rgb(10 144 91);
-  box-shadow: rgb(0 74 45 / 40%) 0px 15px 20px;
   color: white;
   transform: translateY(7px);
   transition: 0.3s;
 }
 
-.error-prompt {
-  color: rgb(212 194 67);
-  background: #9a0909;
-  padding: 5px 10px;
-  border: 1px solid rgba(146, 3, 3, 0.767);
-  border-radius: 4px;
-  opacity: 0;
-  margin: 0 0 15px 0;
-}
-
-.error-prompt.active {
-  opacity: 1;
-  transition: 0.4s;
+label.reset-btn:hover {
+  background: rgb(177 32 18);
+  color: rgba(255, 255, 255, 0.74);
+  transform: translate(5px, 5px);
+  transition: 0.3s;
+  border: none;
 }
 
 /* -------- Input file --------- */
-.expamle-file input {
+.expamle-file input,
+.reset-btn input {
   display: none;
 }
+
 /* --------View work place--------- */
 
 .view-block {
@@ -220,10 +236,44 @@ ul {
   border: 1px solid rgb(219, 219, 219);
   padding: 5px 0px 5px 40px;
   font-size: 16px;
+  margin-bottom: 2px;
 }
 
 .grid-class li:nth-child(2n) {
   justify-self: center;
   border: none;
   text-align: initial;
+}
+
+.btn-tojson-block {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  max-width: 560px;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.btn-tojson-block div {
+  border: 1px solid rgba(63, 151, 202, 0.719);
+}
+
+.btn-tojson-block div:hover {
+  background: rgb(74 171 241);
+  transform: translate(1px);
+}
+
+.to-json-prompt {
+  width: 250px;
+  text-transform: initial;
+  letter-spacing: 1px;
+  color: #08691d;
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.to-json-prompt.error {
+  color: #910101;
 }
