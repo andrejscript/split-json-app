@@ -16,10 +16,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   btnToJSON.addEventListener('click', () => {
     let json = JSON.stringify(objectToJSON);
-    localStorage.setItem('json', json);
-    Object.keys(objectToJSON).length > 0
-      ? addNoticeAfterConvert('filled')
-      : addNoticeAfterConvert('empty');
+
+    if (Object.keys(objectToJSON).length > 0) {
+      addNoticeAfterConvert('filled');
+      localStorage.setItem('json', json);
+    } else {
+      addNoticeAfterConvert('empty');
+    }
+
     deletePropsFromObj(objectToJSON);
   });
 
@@ -52,6 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
     enterOutputField.innerHTML = '';
     stepsProcessField.innerHTML = '';
     resultField.innerHTML = '';
+    deletePropsFromObj(objectToJSON);
     localStorage.clear();
   });
 
@@ -59,7 +64,9 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
       const upload = e.target.files[0];
       const reader = new FileReader();
-      reader.addEventListener('load', (() => {
+      reader.addEventListener(
+        'load',
+        (() => {
           return (e) => {
             let json = JSON.parse(e.target.result);
             let obj = json;
