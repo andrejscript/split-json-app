@@ -59,13 +59,10 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
       const upload = e.target.files[0];
       const reader = new FileReader();
-      reader.addEventListener(
-        'load',
-        (() => {
+      reader.addEventListener('load', (() => {
           return (e) => {
             let json = JSON.parse(e.target.result);
             let obj = json;
-            console.log(obj);
             createSetOfNumberArrays(obj);
             renderIncomeData(obj);
           };
@@ -80,7 +77,6 @@ window.addEventListener('DOMContentLoaded', () => {
   (function toSelectDB() {
     for (let i = 0; i < examplesDB.length; i++) {
       examplesDB[i].addEventListener('click', (e) => {
-        console.log(e.target.dataset.db);
         let receivedPath = e.target.dataset.db;
         createPathToDB(receivedPath);
       });
@@ -88,7 +84,7 @@ window.addEventListener('DOMContentLoaded', () => {
   })();
 
   function createPathToDB(path) {
-    localDB = `/tasks/task2/${path}.json`;
+    localDB = `/db/${path}.json`;
     getDataFetch(localDB);
   }
 
