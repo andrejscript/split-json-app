@@ -5,6 +5,8 @@ body {
   background: linear-gradient(90deg, #69b7eb, #b3dbd3, #f4d6db);
   font-family: 'HK Nova', sans-serif;
   color: #2f2f2f;
+  width: 100%;
+  height: 100%;
 }
 
 .container-fluid {
