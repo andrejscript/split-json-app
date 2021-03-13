@@ -81,6 +81,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  upload.addEventListener('click', () => {
+    upload.value = '';
+  });
+
   (function toSelectDB() {
     for (let i = 0; i < examplesDB.length; i++) {
       examplesDB[i].addEventListener('click', (e) => {
