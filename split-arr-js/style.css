@@ -279,3 +279,20 @@ ul {
 .to-json-prompt.error {
   color: #910101;
 }
+
+body::-webkit-scrollbar {
+  background: #ffdfdf;
+  border-radius: 8px;
+  border: 3px solid #fae7ff;
+  width: 7px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #ff95a6;
+  border-radius: 8px;
+  border: 1px solid #f5cdcd;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #f8e7d1;
+}
