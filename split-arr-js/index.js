@@ -16,6 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   btnToJSON.addEventListener('click', () => {
     let json = JSON.stringify(objectToJSON);
+    btnToJSON.style = 'pointer-events: none';
 
     if (Object.keys(objectToJSON).length > 0) {
       addNoticeAfterConvert('filled');
@@ -31,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
     let p = document.createElement('p');
     p.classList.add('to-json-prompt');
     if (option === 'filled') {
-      p.innerHTML = 'Local storage updated';
+      p.innerHTML = 'Local storage has updated';
     } else {
       p.innerHTML = 'Select some JSON above';
       p.classList.add('error');
@@ -42,6 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 600);
     setTimeout(() => {
       saveBlock.removeChild(p);
+      btnToJSON.style = 'pointer-events: auto';
     }, 3500);
   }
 

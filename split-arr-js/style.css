@@ -254,7 +254,13 @@ ul {
   align-items: center;
   max-width: 560px;
   flex-wrap: wrap;
-  margin: 0 auto;
+  margin: 0 auto 180px;
+  min-height: 70px;
+  position: relative;
+}
+
+.btn-tojson-block p {
+  margin: 0;
 }
 
 .btn-tojson-block div {
@@ -274,6 +280,8 @@ ul {
   font-size: 13px;
   margin-top: 10px;
   text-align: center;
+  position: absolute;
+  bottom: 0;
 }
 
 .to-json-prompt.error {
